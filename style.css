@@ -87,6 +87,9 @@ nav a {
   background-color: red;
 }
 
+.hide {
+  display: none;
+}
 /* text color */
 .grey {
   color: lightslategray;
