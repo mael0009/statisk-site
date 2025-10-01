@@ -1,28 +1,24 @@
-<!DOCTYPE html>
-<html lang="da">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <script src="produkt.js" defer></script>
-    <title>Products</title>
-  </head>
+const productContainer = document.querySelector("#product-container");
 
-  <body>
-    <header>
-      <nav>
-        <a href="index.html">Categories</a>
-        <a href="index.html">Brands</a>
-        <a href="index.html">Seasons</a>
-      </nav>
-    </header>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
 
-    <!-- <main>
+
+// betyder hent. link til et produkt/billede skal sættes ind her
+fetch(`https://kea-alt-del.dk/t7/api/products/${id}`)
+.then((response)=>response.json())
+.then(showProduct)
+
+function showProduct(product){
+console.log(product)
+// inde i `` skal der ligge indholdet fra vores main -> giv main en id der skal sættes i # på øverste linje
+productContainer.innerHTML = `<main>
       <h1>Fashion<span class="red">R</span>Us</h1>
 
-      <div id="product-img">
-        <img src="img/nike_t-shirt.webp" alt="Nike t-shirt" />
-      </div>
+      <img src="https://kea-alt-del.dk/t7/images/webp/640/${product.id}.webp" 
+        alt="Produktbillede"
+        class="product-card img"/>
+      
 
       <div class="product-info">
         <div class="info-left">
@@ -30,12 +26,12 @@
 
           <p>
             <strong> Model Name </strong> <br />
-            Sahara Team India Fanwear Round Neck Jersey
+            ${product.productdisplayname}
           </p>
 
           <p>
             <strong>Color</strong> <br />
-            Blue
+            ${product.basecolour}
           </p>
 
           <p>
@@ -50,9 +46,7 @@
 
         <div class="info-right">
           <h2>
-            Sahara Team <br />
-            India Fanwear <br />
-            Round Neck Jersey
+          ${product.productdisplayname}
           </h2>
           <p>Tshirts | Nike</p>
 
@@ -65,10 +59,5 @@
           <button>Add to basket</button>
         </div>
       </div>
-    </main> -->
-
-    <img src="" alt="" />
-
-    <main id="product-container"></main>
-  </body>
-</html>
+    </main>`;
+}
