@@ -4,31 +4,51 @@ const category = params.get("category");
 
 // TAGER FAT I MIN "BUTTON" DER HAR ID'EN "FILTERS" FRA MIN HTML FIL 
 document.querySelectorAll("#filters button").forEach((knap)=>knap.addEventListener("click", showFiltered));
-
-
+document.querySelectorAll("#sorting").forEach((knap)=>knap.addEventListener("click", showSorted));
 
 const productContainer = document.querySelector("#products");
 
 const header = document.querySelector("h2").textContent = category
 
+
+//  VISER OG SORTERE PRISEN LAV TIL HØJ
+function showSorted(event){
+  const direction = event.target.dataset.direction;
+  if(direction=="lowhi"){
+    currentDataSet.sort((a, b) => a.price - b.price);
+  }else{
+currentDataSet.sort((a, b) => b.price - a.price);
+  }
+  showProducts(currentDataSet);
+}
+
+
+// FILTRERE VISNING AF KATEGORIER I KØN
+function showFiltered(event) {
+    console.log(event.target.dataset.gender);
+    const gender = event.target.dataset.gender;
+    if(gender=="All"){
+      showProducts(allData);
+      currentDataSet = allData
+    }else{
+        const fraction = allData.filter(product=> product.gender == gender);
+       currentDataSet = fraction;
+    }
+    showProducts(currentDataSet);
+}
+
+let allData, currentDataSet;
+
 fetch(`https://kea-alt-del.dk/t7/api/products?limit=30&category=${category}`)
 .then((response) => response.json())
 .then((data) => {
-    allData = data;
-    showProducts(data);
+    allData = currentDataSet = data;
+    showProducts(allData);
 });
 
-// FILTRERE VISNING AF KATEGORIER I KØN
-function showFiltered() {
-    console.log(this.dataset.gender);
-    const gender = this.dataset.gender;
-    if(gender=="All"){
-        showProducts(allData);
-    }else{
-        const fraction = allData.filter(product=> product.gender == gender);
-        showProducts(fraction);
-    }
-}
+
+
+
 
 // VISER INDHOLDET FRA MIN HTML FIL OG GØR DET DYNAMISK
 function showProducts(data) {
